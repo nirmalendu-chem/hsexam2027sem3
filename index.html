@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HS Exam 2027 Data Entry</title>
+    <!-- Bootstrap CSS for mobile-friendly styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .screen { display: none; }
+        .screen.active { display: block; }
+        .card { box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-radius: 12px; border: none; margin-bottom: 15px;}
+        
+        /* DAC Dashboard Teal Theme */
+        .dac-summary-card { background-color: #e6fffa; border-left: 5px solid #0f766e; }
+        .text-teal-custom { color: #0f766e !important; }
+        .bg-teal-custom { background-color: #0f766e !important; }
+        
+        /* Custom Yellow Input Field Styling */
+        #data-entry-form .form-control {
+            background-color: #fffde7; 
+            border-color: #fbc02d;     
+        }
+        #data-entry-form .form-control:focus {
+            background-color: #fff9c4; 
+            border-color: #f57f17;
+            box-shadow: 0 0 0 0.25rem rgba(253, 216, 53, 0.25);
+        }
+
+        #save-status-bar {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: white; border-top: 1px solid #ddd; padding: 12px;
+            text-align: center; font-weight: bold; z-index: 1000;
+        }
+        .form-section-title { color: #607d8b; font-size: 1.1rem; margin-top: 20px; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 15px;}
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6c757d;
+        }
+        .login-footer .developer-text {
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 1. LOGIN SCREEN -->
+<div id="login-screen" class="container mt-4 screen active">
+    <div class="card p-4 mx-auto" style="max-width: 400px;">
+        <h4 class="text-center mb-4 text-primary fw-bold">HS EXAM 2027 SEM-3 JGM</h4>
+        <form id="login-form">
+            <div class="mb-3">
+                <label class="form-label">User Role</label>
+                <select id="role-select" class="form-select" onchange="toggleLoginFields()">
+                    <option value="Council Nominee">Council Nominee</option>
+                    <option value="DAC">DAC</option>
+                </select>
+            </div>
+            <div class="mb-3" id="centre-group">
+                <label class="form-label">Centre Code</label>
+                <select id="centre-select" class="form-select"></select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Exam Date</label>
+                <select id="date-select" class="form-select"></select>
+                <div id="date-warning" class="text-danger fw-bold small mt-2 d-none">
+                    ⚠️ NO EXAMINATION TODAY<br>Please manually verify the date above.
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">PIN</label>
+                <input type="password" id="pin-input" class="form-control" placeholder="Enter PIN" required>
+            </div>
+            <button type="submit" id="login-btn" class="btn btn-primary w-100">Login</button>
+            <div id="login-error" class="text-danger mt-3 text-center d-none"></div>
+        </form>
+        
+        <div class="login-footer">
+            <div class="fw-bold small text-secondary">MAINTAINED BY ABRSM(SE) JHARGRAM</div>
+            <div class="developer-text text-muted mt-1">DEVELOPED BY NIRMALENDU MANDAL</div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. CHANGE PIN SCREEN -->
+<div id="change-pin-screen" class="container mt-5 screen">
+    <div class="card p-4 mx-auto" style="max-width: 400px;">
+        <h4 class="text-center mb-3">Set New Security PIN</h4>
+        <p class="text-muted text-center text-sm">Please change your default PIN before continuing.</p>
+        <form id="pin-form">
+            <input type="password" id="new-pin" class="form-control mb-3" placeholder="Enter New PIN" required>
+            <button type="submit" id="pin-btn" class="btn btn-primary w-100">Save and Continue</button>
+        </form>
+    </div>
+</div>
+
+<!-- 3. DATA ENTRY SCREEN (NOMINEES) -->
+<div id="data-entry-screen" class="container mt-4 screen" style="padding-bottom: 70px;">
+    <h4 id="entry-title" class="text-primary mb-1"></h4>
+    
+    <div class="card p-3 mb-3 bg-light border">
+        <div class="small text-secondary"><strong>Venue Name:</strong> <span id="display-venue-name" class="text-dark fw-semibold">Fetching...</span></div>
+        <div class="small text-secondary mt-1"><strong>Nominee Name:</strong> <span id="display-nominee-name" class="text-dark fw-semibold">Fetching...</span></div>
+    </div>
+    
+    <div class="card p-3 mb-3">
+        <label class="form-label text-muted">Change Exam Date</label>
+        <select id="entry-date-select" class="form-select" onchange="onEntryDateChange()"></select>
+    </div>
+
+    <form id="data-entry-form">
+        <div class="form-section-title">Morning Check-ins</div>
+        <input type="text" class="form-control mb-2" id="qpReceived" placeholder="Question Paper Received (8:15 - 9:15)" onfocus="this.placeholder='Enter Time (e.g., 8:20AM, 8:20, 8.20)'" onblur="this.placeholder='Question Paper Received (8:15 - 9:15)'" oninput="debounceSave()">
+        <input type="text" class="form-control mb-2" id="qpBagOpened" placeholder="Question Cloth Bag Opened (10:15)" onfocus="this.placeholder='Enter Time (e.g., 8:20AM, 8:20, 8.20)'" onblur="this.placeholder='Question Cloth Bag Opened (10:15)'" oninput="debounceSave()">
+        <input type="text" class="form-control mb-2" id="qpHandover" placeholder="Paper Handover to Invigilator (10:30)" onfocus="this.placeholder='Enter Time (e.g., 8:20AM, 8:20, 8.20)'" onblur="this.placeholder='Paper Handover to Invigilator (10:30)'" oninput="debounceSave()">
+        <input type="text" class="form-control mb-2" id="examStarted" placeholder="Exam Started (11:00)" onfocus="this.placeholder='Enter Time (e.g., 8:20AM, 8:20, 8.20)'" onblur="this.placeholder='Exam Started (11:00)'" oninput="debounceSave()">
+
+        <div class="form-section-title">Candidate Attendance</div>
+        <div class="row mb-2">
+            <div class="col"><input type="number" class="form-control" id="presentMale" placeholder="Present Male" oninput="debounceSave()"></div>
+            <div class="col"><input type="number" class="form-control" id="presentFemale" placeholder="Present Female" oninput="debounceSave()"></div>
+        </div>
+        <div class="row mb-2">
+            <div class="col"><input type="number" class="form-control" id="absentMale" placeholder="Absent Male" oninput="debounceSave()"></div>
+            <div class="col"><input type="number" class="form-control" id="absentFemale" placeholder="Absent Female" oninput="debounceSave()"></div>
+        </div>
+
+        <div class="form-section-title">Afternoon Wrap-up</div>
+        <input type="text" class="form-control mb-2" id="extraQReturned" placeholder="Extra Question Returned (11:30)" onfocus="this.placeholder='Enter Time (e.g., 8:20AM, 8:20, 8.20)'" onblur="this.placeholder='Extra Question Returned (11:30)'" oninput="debounceSave()">
+        <input type="text" class="form-control mb-2" id="examClosed" placeholder="Exam Closed (12:30)" onfocus="this.placeholder='Enter Time (e.g., 8:20AM, 8:20, 8.20)'" onblur="this.placeholder='Exam Closed (12:30)'" oninput="debounceSave()">
+        <input type="text" class="form-control mb-2" id="omrPacked" placeholder="OMR Packed & Despatched" onfocus="this.placeholder='Enter Time (e.g., 8:20AM, 8:20, 8.20)'" onblur="this.placeholder='OMR Packed & Despatched'" oninput="debounceSave()">
+    </form>
+
+    <div id="save-status-bar">
+        <span id="save-text" style="color: gray;">Ready</span>
+    </div>
+</div>
+
+<!-- 4. DAC DASHBOARD SCREEN -->
+<div id="dac-dashboard-screen" class="container mt-4 screen" style="padding-bottom: 40px;">
+    <div class="card p-3 mb-3">
+        <div class="d-flex align-items-center">
+            <span class="fw-bold me-3">Select Date:</span>
+            <select id="dac-date-select" class="form-select" onchange="fetchDacData()"></select>
+        </div>
+    </div>
+    <div id="dac-loading" class="text-center text-teal-custom fw-bold my-4 d-none">Loading Data...</div>
+    <div id="dac-content"></div>
+</div>
+
+<script>
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbw5R9YSy92_-r18TI06-8g9RTrCYZnvx2Rz7GDpC6GqWLkEt5b_eSt6dzTsd2uE9L5ubA/exec";
+    
+    const centreCodes = [
+        '3301_305085', '3302_305259', '3302_305679', '3303_305200', '3304_305314',
+        '3304_305817', '3305_305100', '3306_305223', '3307_305126', '3307_305658',
+        '3308_305400', '3308_305702', '3309_305668', '3310_305687', '3311_305301',
+        '3312_305334', '3312_305600', '3312_305834', '3313_305857', '3314_305646',
+        '3315_305671', '3316_305746', '3317_305277', '3317_305278', '3317_305292',
+        '3318_305650', '3320_305392'
+    ];
+    
+    const dates = [
+        '21/09/26', '24/09/26', '25/09/26', '28/09/26', '29/09/26', 
+        '30/09/26', '01/10/26', '03/10/26', '12/10/26', '13/10/26', '14/10/26'
+    ];
+
+    let activeUser = "";
+    let saveTimeout;
+
+    window.onload = () => {
+        populateSelect('centre-select', centreCodes);
+        populateSelect('date-select', dates);
+        populateSelect('entry-date-select', dates);
+        populateSelect('dac-date-select', dates);
+        initTodayDateSelection();
+    };
+
+    function populateSelect(id, options) {
+        const select = document.getElementById(id);
+        options.forEach(opt => select.add(new Option(opt, opt)));
+    }
+
+    function initTodayDateSelection() {
+        const now = new Date();
+        const day = String(now.getDate()).padStart(2, '0');
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const year = String(now.getFullYear()).slice(-2);
+        const todayStr = `${day}/${month}/${year}`;
+
+        const dateSelect = document.getElementById('date-select');
+        const entryDateSelect = document.getElementById('entry-date-select');
+        const dacDateSelect = document.getElementById('dac-date-select');
+        const warningBox = document.getElementById('date-warning');
+
+        if (dates.includes(todayStr)) {
+            dateSelect.value = todayStr;
+            entryDateSelect.value = todayStr;
+            dacDateSelect.value = todayStr;
+            warningBox.classList.add('d-none');
+        } else {
+            dateSelect.value = dates[0];
+            entryDateSelect.value = dates[0];
+            dacDateSelect.value = dates[0];
+            warningBox.classList.remove('d-none');
+        }
+    }
+
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    function toggleLoginFields() {
+        const isDac = document.getElementById('role-select').value === 'DAC';
+        document.getElementById('centre-group').style.display = isDac ? 'none' : 'block';
+    }
+
+    async function submitToGoogle(action, data) {
+        const formData = new URLSearchParams();
+        formData.append('action', action);
+        for (const key in data) formData.append(key, data[key] || "");
+
+        const res = await fetch(scriptUrl, { method: 'POST', body: formData });
+        return await res.json();
+    }
+
+    // --- LOGIN ---
+    document.getElementById('login-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('login-btn');
+        const err = document.getElementById('login-error');
+        btn.innerText = "Connecting..."; btn.disabled = true; err.classList.add('d-none');
+
+        const role = document.getElementById('role-select').value;
+        const code = role === 'DAC' ? 'DAC' : document.getElementById('centre-select').value;
+        const pin = document.getElementById('pin-input').value;
+        const date = document.getElementById('date-select').value;
+
+        if (role === 'DAC' && pin === '721507') {
+            activeUser = code;
+            document.getElementById('dac-date-select').value = date;
+            renderDacHeader();
+            showScreen('dac-dashboard-screen');
+            fetchDacData();
+            return;
+        }
+
+        try {
+            const data = await submitToGoogle('login', { code, pin });
+            if (data.status === 'success') {
+                activeUser = code;
+                
+                document.getElementById('display-venue-name').innerText = data.centreName || "Not Found";
+                document.getElementById('display-nominee-name').innerText = data.nomineeName || "Not Found";
+
+                if (data.forceChange === true || data.forceChange === 'TRUE') {
+                    showScreen('change-pin-screen');
+                } else {
+                    document.getElementById('entry-title').innerText = `Dashboard: ${code}`;
+                    document.getElementById('entry-date-select').value = date;
+                    
+                    await fetchExistingData(code, date);
+                    
+                    showScreen('data-entry-screen');
+                }
+            } else {
+                err.innerText = data.message || "Invalid PIN or Credentials";
+                err.classList.remove('d-none');
+            }
+        } catch (error) {
+            err.innerText = "Network Error. Please try again.";
+            err.classList.remove('d-none');
+        }
+        btn.innerText = "Login"; btn.disabled = false;
+    };
+
+    function renderDacHeader() {
+        let headerDiv = document.getElementById('dac-app-bar');
+        if (!headerDiv) {
+            headerDiv = document.createElement('div');
+            headerDiv.id = 'dac-app-bar';
+            headerDiv.className = 'p-3 mb-3 text-white rounded bg-teal-custom';
+            headerDiv.innerHTML = '<h4 class="m-0">DAC Master Dashboard</h4>';
+            document.getElementById('dac-dashboard-screen').prepend(headerDiv);
+        }
+    }
+
+    // --- FETCH EXISTING DATA FOR NOMINEE FORM ---
+    async function fetchExistingData(code, day) {
+        clearFormFields();
+        try {
+            const res = await submitToGoogle('getData', { code, day });
+            if (res.status === 'success' && res.found && res.data) {
+                document.getElementById('qpReceived').value = res.data.qpReceived || '';
+                document.getElementById('qpBagOpened').value = res.data.qpBagOpened || '';
+                document.getElementById('qpHandover').value = res.data.qpHandover || '';
+                document.getElementById('examStarted').value = res.data.examStarted || '';
+                document.getElementById('presentMale').value = res.data.presentMale || '';
+                document.getElementById('presentFemale').value = res.data.presentFemale || '';
+                document.getElementById('absentMale').value = res.data.absentMale || '';
+                document.getElementById('absentFemale').value = res.data.absentFemale || '';
+                document.getElementById('extraQReturned').value = res.data.extraQReturned || '';
+                document.getElementById('examClosed').value = res.data.examClosed || '';
+                document.getElementById('omrPacked').value = res.data.omrPacked || '';
+                
+                document.getElementById('save-text').innerText = "Loaded from Sheet ✔️";
+                document.getElementById('save-text').style.color = "green";
+            } else {
+                document.getElementById('save-text').innerText = "Ready (New Entry)";
+                document.getElementById('save-text').style.color = "gray";
+            }
+        } catch (e) {
+            console.error("Error fetching existing data", e);
+        }
+    }
+
+    function clearFormFields() {
+        const fields = ['qpReceived', 'qpBagOpened', 'qpHandover', 'examStarted', 'presentMale', 'presentFemale', 'absentMale', 'absentFemale', 'extraQReturned', 'examClosed', 'omrPacked'];
+        fields.forEach(id => document.getElementById(id).value = '');
+    }
+
+    async function onEntryDateChange() {
+        const newDate = document.getElementById('entry-date-select').value;
+        await fetchExistingData(activeUser, newDate);
+        triggerSave();
+    }
+
+    // --- CHANGE PIN ---
+    document.getElementById('pin-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('pin-btn');
+        btn.innerText = "Saving..."; btn.disabled = true;
+        
+        try {
+            await submitToGoogle('changePin', { 
+                code: activeUser, 
+                newPin: document.getElementById('new-pin').value 
+            });
+            const date = document.getElementById('date-select').value;
+            document.getElementById('entry-title').innerText = `Dashboard: ${activeUser}`;
+            document.getElementById('entry-date-select').value = date;
+            await fetchExistingData(activeUser, date);
+            showScreen('data-entry-screen');
+        } catch (error) {
+            alert("Error changing PIN");
+        }
+        btn.innerText = "Save and Continue"; btn.disabled = false;
+    };
+
+    // --- DATA ENTRY ---
+    function debounceSave() {
+        const statusBar = document.getElementById('save-text');
+        statusBar.innerText = "Saving...";
+        statusBar.style.color = "orange";
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => triggerSave(), 1500);
+    }
+
+    async function triggerSave() {
+        try {
+            const data = {
+                code: activeUser,
+                day: document.getElementById('entry-date-select').value,
+                qpReceived: document.getElementById('qpReceived').value,
+                qpBagOpened: document.getElementById('qpBagOpened').value,
+                qpHandover: document.getElementById('qpHandover').value,
+                examStarted: document.getElementById('examStarted').value,
+                presentMale: document.getElementById('presentMale').value,
+                presentFemale: document.getElementById('presentFemale').value,
+                absentMale: document.getElementById('absentMale').value,
+                absentFemale: document.getElementById('absentFemale').value,
+                extraQReturned: document.getElementById('extraQReturned').value,
+                examClosed: document.getElementById('examClosed').value,
+                omrPacked: document.getElementById('omrPacked').value
+            };
+            
+            const res = await submitToGoogle('submitData', data);
+            const statusBar = document.getElementById('save-text');
+            if (res.status === 'success') {
+                statusBar.innerText = "Saved ✔️";
+                statusBar.style.color = "green";
+            } else {
+                statusBar.innerText = "Error Saving";
+                statusBar.style.color = "red";
+            }
+        } catch (e) {
+            document.getElementById('save-text').innerText = "Offline - Retrying...";
+            document.getElementById('save-text').style.color = "red";
+        }
+    }
+
+    // --- DAC DASHBOARD LOGIC ---
+    async function fetchDacData() {
+        document.getElementById('dac-loading').classList.remove('d-none');
+        document.getElementById('dac-content').innerHTML = '';
+        
+        try {
+            const res = await submitToGoogle('getDacReport', { day: document.getElementById('dac-date-select').value });
+            if (res.status === 'success') {
+                renderDacDashboard(res.data);
+            } else {
+                alert("Error fetching report");
+            }
+        } catch (e) {
+            alert("Network Error");
+        }
+        document.getElementById('dac-loading').classList.add('d-none');
+    }
+
+    function formatSummaryStatus(count, total) {
+        if (total === 0) return "NO (0 / 0)";
+        return count === total ? `YES (${count} / ${total})` : `NO (${count} / ${total})`;
+    }
+
+    function renderDacDashboard(venues) {
+        if (!venues || venues.length === 0) {
+            document.getElementById('dac-content').innerHTML = '<p class="text-center mt-4 text-muted">No data found for this date.</p>';
+            return;
+        }
+
+        const totalVenues = venues.length;
+        let totalPresM = 0, totalPresF = 0, totalAbsM = 0, totalAbsF = 0;
+        let attendanceReportedCount = 0;
+        let qpReceivedCount = 0, bagOpenedCount = 0, qpHandoverCount = 0, examStartedCount = 0;
+        let extraQCount = 0, examClosedCount = 0, omrPackedCount = 0;
+
+        venues.forEach(v => {
+            const pm = Number(v.presM) || 0;
+            const pf = Number(v.presF) || 0;
+            const am = Number(v.absM) || 0;
+            const af = Number(v.absF) || 0;
+            
+            totalPresM += pm;
+            totalPresF += pf;
+            totalAbsM += am;
+            totalAbsF += af;
+
+            if ((pm + pf + am + af) > 0) {
+                attendanceReportedCount++;
+            }
+
+            if (v.qpReceived && v.qpReceived !== 'Pending' && v.qpReceived !== '') qpReceivedCount++;
+            if (v.qpBagOpened && v.qpBagOpened !== 'Pending' && v.qpBagOpened !== '') bagOpenedCount++;
+            if (v.qpHandover && v.qpHandover !== 'Pending' && v.qpHandover !== '') qpHandoverCount++;
+            if (v.examStarted && v.examStarted !== 'Pending' && v.examStarted !== '') examStartedCount++;
+            if (v.extraQReturned && v.extraQReturned !== 'Pending' && v.extraQReturned !== '') extraQCount++;
+            if (v.examClosed && v.examClosed !== 'Pending' && v.examClosed !== '') examClosedCount++;
+            if (v.omrPacked && v.omrPacked !== 'Pending' && v.omrPacked !== '') omrPackedCount++;
+        });
+
+        const totalPresent = totalPresM + totalPresF;
+        const totalAbsent = totalAbsM + totalAbsF;
+        const totalCandidates = totalPresent + totalAbsent;
+        
+        const overallPercentage = totalCandidates > 0 
+            ? ((totalPresent / totalCandidates) * 100).toFixed(2) + "%" 
+            : "0.00%";
+
+        const attReportedText = formatSummaryStatus(attendanceReportedCount, totalVenues);
+        const isAttComplete = attendanceReportedCount === totalVenues && totalVenues > 0;
+
+        let html = `
+        <div class="card p-3 dac-summary-card">
+            <div class="d-flex align-items-center mb-2">
+                <span class="fs-5 me-2">📊</span>
+                <h5 class="text-teal-custom m-0 fw-bold">OVERALL DISTRICT SUMMARY</h5>
+            </div>
+            <hr class="text-teal-custom my-2">
+            
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="fw-bold">Attendance Reported:</span>
+                <span class="fw-bold ${isAttComplete ? 'text-success' : 'text-danger'}">${attReportedText}</span>
+            </div>
+            
+            <div class="row text-center mb-3">
+                <div class="col">
+                    <div class="text-muted small fw-bold">Total Candidates</div>
+                    <div class="fs-5 fw-semibold">${totalCandidates}</div>
+                </div>
+                <div class="col">
+                    <div class="text-muted small fw-bold">Total Present</div>
+                    <div class="fs-5 fw-semibold text-success">${totalPresent}</div>
+                </div>
+                <div class="col">
+                    <div class="text-muted small fw-bold">Appeared %</div>
+                    <div class="fs-5 fw-semibold text-teal-custom">${overallPercentage}</div>
+                </div>
+            </div>
+            
+            <div class="text-secondary small">Present Details: ${totalPresM} Male | ${totalPresF} Female</div>
+            <div class="text-secondary small mb-3">Absent Details: &nbsp;${totalAbsM} Male | ${totalAbsF} Female</div>
+            
+            <hr class="text-teal-custom my-2">
+            
+            <div class="fw-bold mb-2">Venue Status Tracking (Completed)</div>
+            ${buildSummaryTimeRow('QP Received:', formatSummaryStatus(qpReceivedCount, totalVenues))}
+            ${buildSummaryTimeRow('Bag Opened:', formatSummaryStatus(bagOpenedCount, totalVenues))}
+            ${buildSummaryTimeRow('QP Handover:', formatSummaryStatus(qpHandoverCount, totalVenues))}
+            ${buildSummaryTimeRow('Exam Started:', formatSummaryStatus(examStartedCount, totalVenues))}
+            ${buildSummaryTimeRow('Extra Q Returned:', formatSummaryStatus(extraQCount, totalVenues))}
+            ${buildSummaryTimeRow('Exam Closed:', formatSummaryStatus(examClosedCount, totalVenues))}
+            ${buildSummaryTimeRow('OMR Packed & Despatched:', formatSummaryStatus(omrPackedCount, totalVenues))}
+        </div>
+
+        <h5 class="text-muted mt-4 mb-2 ps-2 fw-bold">Individual Venue Details</h5>`;
+
+        venues.forEach(v => {
+            html += `
+            <div class="card p-3">
+                <h6 class="text-teal-custom fw-bold mb-2">${v.centreCode} - ${v.centreName}</h6>
+                <hr class="my-2">
+                <div class="fw-bold small mb-2">Attendance Summary</div>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <div class="small">Present: ${v.presM} (M) | ${v.presF} (F)</div>
+                        <div class="small text-muted">Absent: &nbsp;${v.absM} (M) | ${v.absF} (F)</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="fw-bold small">Appeared: ${v.totalPresent} / ${v.totalCandidates}</div>
+                        <div class="fw-bold text-success">${v.percentage}</div>
+                    </div>
+                </div>
+                <hr class="my-2">
+                <div class="fw-bold small mb-2">Status Tracking</div>
+                ${buildVenueTimeRow('QP Received (8:15 AM)', v.qpReceived)}
+                ${buildVenueTimeRow('Bag Opened (10:15 AM)', v.qpBagOpened)}
+                ${buildVenueTimeRow('QP Handover (10:30 AM)', v.qpHandover)}
+                ${buildVenueTimeRow('Exam Started (11:00 AM)', v.examStarted)}
+                ${buildVenueTimeRow('Extra Q Returned (11:30 AM)', v.extraQReturned)}
+                ${buildVenueTimeRow('Exam Closed (12:30 PM)', v.examClosed)}
+                ${buildVenueTimeRow('OMR Packed & Despatched', v.omrPacked)}
+            </div>`;
+        });
+
+        document.getElementById('dac-content').innerHTML = html;
+    }
+
+    function buildSummaryTimeRow(label, value) {
+        const isYes = value.startsWith("YES");
+        const colorClass = isYes ? 'text-success' : 'text-danger';
+        return `
+        <div class="d-flex justify-content-between mb-1 small">
+            <span class="text-secondary">${label}</span>
+            <span class="fw-semibold ${colorClass}">${value}</span>
+        </div>`;
+    }
+
+    function buildVenueTimeRow(label, value) {
+        const hasValue = value && value !== 'Pending' && value !== '';
+        // Displays exact typed text format (e.g., YES (8:20AM), YES (8:20), YES (8.20))
+        const displayVal = hasValue ? `YES (${value})` : 'Pending';
+        const colorClass = hasValue ? 'text-success' : 'text-danger';
+
+        return `
+        <div class="d-flex justify-content-between mb-1" style="font-size: 0.85rem;">
+            <span class="text-muted">${label}</span>
+            <span class="fw-semibold ${colorClass}">${displayVal}</span>
+        </div>`;
+    }
+</script>
+</body>
+</html>
