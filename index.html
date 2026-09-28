@@ -135,9 +135,7 @@
         .time-entry-group input { border: none; background: transparent; box-shadow: none !important; border-radius: 0; flex-grow: 1; }
         .time-entry-group select { border: none; background: #f1f5f9; color: var(--primary); box-shadow: none !important; border-radius: 0; border-left: 1px solid var(--border-color); cursor: pointer; width: auto; }
 
-        /* =========================================
-           POWERFUL DISABLED STATE OVERLAY
-           ========================================= */
+        /* DISABLED STATE OVERLAY */
         .form-overlay-disabled {
             opacity: 0.4 !important;
             pointer-events: none !important;
@@ -146,14 +144,12 @@
             transition: all 0.3s ease;
         }
 
-        /* =========================================
-           TOP FLOATING TOAST NOTIFICATION
-           ========================================= */
+        /* TOP FLOATING TOAST NOTIFICATION */
         #save-status-bar {
             position: fixed; 
-            top: 25px; /* Moved from bottom to TOP */
+            top: 25px;
             left: 50%; 
-            transform: translate(-50%, -100px); /* Hide upwards */
+            transform: translate(-50%, -100px);
             opacity: 0; 
             visibility: hidden; 
             background: rgba(255, 255, 255, 0.98); 
@@ -749,9 +745,6 @@
         }
     }
 
-    // ==========================================
-    // FORM LOCKING SYSTEM
-    // ==========================================
     function setFormDisabled(disabled) {
         const form = document.getElementById('data-entry-form');
         const subjectsBox = document.getElementById('subjects-container-wrapper');
@@ -768,31 +761,24 @@
         }
     }
 
-    // ==========================================
     // STRICT FETCHING SEQUENCE WITH AUTO-RETRY
-    // ==========================================
     async function loadDataForDate() {
-        // Step 1: Disable Inputs & Show "Data Fetching..."
         setFormDisabled(true);
         updateStatusBar('fa-arrows-rotate fa-spin', 'Data Fetching...', 'var(--primary)');
         
-        // Force browser to paint the visual changes before pausing
         await new Promise(resolve => setTimeout(resolve, 100));
         
         const day = document.getElementById('entry-date-select').value;
         renderSubjectCheckboxes(day);
         
-        // Clear old data while fetching
         timeFields.forEach(f => { document.getElementById(f + '_time').value = ""; });
         numberFields.forEach(f => { document.getElementById(f).value = ""; });
 
-        // Step 2: Fetch Data from Google Sheets
         try {
             const res = await submitToGoogle('getData', { code: activeUser, day: day });
             
             if (res.status === 'success' && res.data) {
                 populateFormFields(res.data);
-                // Step 3: Enable Inputs (Input Ready)
                 updateStatusBar('fa-check-circle', 'Data Fetched Successfully!', 'var(--success)', true);
                 setFormDisabled(false);
             } else {
@@ -803,17 +789,13 @@
             }
             
         } catch (e) {
-            // ERROR হয়েছে! ফর্ম লক করা অবস্থাতেই থাকবে এবং নিজে থেকে আবার ফেচ করার চেষ্টা করবে
-            updateStatusBar('fa-triangle-exclamation', 'Network Error - Retrying...', 'var(--danger)'); // no auto-hide
-            setTimeout(loadDataForDate, 3000); // Try again after 3 seconds
+            updateStatusBar('fa-triangle-exclamation', 'Network Error - Retrying...', 'var(--danger)');
+            setTimeout(loadDataForDate, 3000);
         }
     }
 
-    // ==========================================
     // DATA SAVING SEQUENCE WITH AUTO-RETRY
-    // ==========================================
     function debounceSave() {
-        // Step 4: Show "Data Saving..."
         updateStatusBar('fa-cloud-arrow-up fa-bounce', 'Data Saving...', '#FF8C42');
         clearTimeout(saveTimeout);
         saveTimeout = setTimeout(() => triggerSave(), 1500); 
@@ -844,20 +826,17 @@
         try {
             const res = await submitToGoogle('submitData', data);
             if (res.status === 'success') {
-                // Step 5: Success Message
                 updateStatusBar('fa-cloud-check', 'Data Saved Successfully!', 'var(--success)', true);
             } else {
                 updateStatusBar('fa-circle-xmark', 'Save Failed!', 'var(--danger)', true);
             }
         } catch (e) {
             updateStatusBar('fa-wifi', 'Network Error - Auto Retrying...', 'var(--danger)');
-            setTimeout(triggerSave, 3000); // Auto retry save
+            setTimeout(triggerSave, 3000);
         }
     }
 
-    // ==========================================
     // DAC DASHBOARD FUNCTIONS
-    // ==========================================
     async function fetchDacData(isSilent = false) {
         if (!isSilent) {
             document.getElementById('dac-loading').classList.remove('d-none');
@@ -909,8 +888,15 @@
         let reportedSubjectCounts = {};
 
         venues.forEach(v => {
-            const pm = Number(v.presM) || 0; const pf = Number(v.presF) || 0; const am = Number(v.absM) || 0; const af = Number(v.absF) || 0;
-            totalPresM += pm; totalPresF += pf; totalAbsM += am; totalAbsF += af;
+            const pm = parseInt(v.presM, 10) || 0;
+            const pf = parseInt(v.presF, 10) || 0;
+            const am = parseInt(v.absM, 10) || 0;
+            const af = parseInt(v.absF, 10) || 0;
+            
+            totalPresM += pm;
+            totalPresF += pf;
+            totalAbsM += am;
+            totalAbsF += af;
 
             if ((pm + pf + am + af) > 0) attendanceReportedCount++;
             if (v.qpReceived && v.qpReceived !== 'Pending' && v.qpReceived !== '') qpReceivedCount++;
@@ -927,9 +913,17 @@
             }
         });
 
-        const totalPresent = totalPresM + totalPresF; const totalAbsent = totalAbsM + totalAbsF; const totalCandidates = totalPresent + totalAbsent;
-        let percentageNum = 0; if (totalCandidates > 0) percentageNum = (totalPresent / totalCandidates) * 100;
-        const overallPercentage = totalCandidates > 0 ? percentageNum.toFixed(2) + "%" : "0.00%";
+        // ROBUST OVERALL PERCENTAGE CALCULATION
+        const totalPresent = totalPresM + totalPresF;
+        const totalAbsent = totalAbsM + totalAbsF;
+        const totalCandidates = totalPresent + totalAbsent;
+        
+        let overallPercentage = "N/A";
+        if (totalCandidates > 0) {
+            const pct = ((totalPresent / totalCandidates) * 100).toFixed(2);
+            overallPercentage = `${pct}%`;
+        }
+
         const attReportedText = formatSummaryStatus(attendanceReportedCount, totalVenues);
         const isAttComplete = attendanceReportedCount === totalVenues && totalVenues > 0;
 
@@ -944,7 +938,74 @@
             subjectSummaryHtml += `</div><hr class="border-secondary opacity-10 my-4">`;
         }
 
-        let html = `<div class="card p-4 p-md-5 dac-summary-card mb-4"><h5 class="text-dark m-0 fw-bold mb-4 d-flex align-items-center"><i class="fa-solid fa-chart-line text-primary fs-4 me-2"></i> District Overview</h5><div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4 mb-4 border border-light"><span class="fw-bold text-secondary"><i class="fa-solid fa-clipboard-check text-primary me-2"></i>Attendance Reported</span><span class="badge ${isAttComplete ? 'bg-success' : 'bg-danger'} bg-opacity-10 ${isAttComplete ? 'text-success' : 'text-danger'} rounded-pill fs-6 px-3 py-2 border border-${isAttComplete ? 'success' : 'danger'} border-opacity-25">${attReportedText}</span></div><div class="row text-center mb-4 g-2"><div class="col-6 col-md-3"><div class="stat-box border-0 bg-light p-2 p-md-3"><div class="text-secondary small fw-bold mb-1">Total</div><div class="fs-4 fw-bold text-dark">${totalCandidates}</div></div></div><div class="col-6 col-md-3"><div class="stat-box border-0 bg-success bg-opacity-10 p-2 p-md-3"><div class="text-success small fw-bold mb-1">Present</div><div class="fs-4 fw-bold text-success">${totalPresent}</div></div></div><div class="col-6 col-md-3"><div class="stat-box border-0 bg-danger bg-opacity-10 p-2 p-md-3"><div class="text-danger small fw-bold mb-1">Absent</div><div class="fs-4 fw-bold text-danger">${totalAbsent}</div></div></div><div class="col-6 col-md-3"><div class="stat-box border-0 bg-primary bg-opacity-10 p-2 p-md-3"><div class="text-primary small fw-bold mb-1">Percentage</div><div class="fs-4 fw-bold text-primary">${overallPercentage}</div></div></div></div><div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4 mb-4 border border-light"><div class="text-center w-50 border-end"><div class="small fw-bold text-success mb-1">Present Details</div><div class="fs-6 fw-bold text-dark">${totalPresM} <span class="text-secondary fw-normal">M</span> &nbsp;|&nbsp; ${totalPresF} <span class="text-secondary fw-normal">F</span></div></div><div class="text-center w-50"><div class="small fw-bold text-danger mb-1">Absent Details</div><div class="fs-6 fw-bold text-dark">${totalAbsM} <span class="text-secondary fw-normal">M</span> &nbsp;|&nbsp; ${totalAbsF} <span class="text-secondary fw-normal">F</span></div></div></div>${subjectSummaryHtml}<div class="fw-bold mb-3 text-dark mt-2"><i class="fa-solid fa-bars-progress text-primary me-2"></i>Venue Status Tracking</div><div class="bg-light p-4 rounded-4 border border-light">${buildSummaryTimeRow('QP Received', formatSummaryStatus(qpReceivedCount, totalVenues))}${buildSummaryTimeRow('Bag Opened', formatSummaryStatus(bagOpenedCount, totalVenues))}${buildSummaryTimeRow('QP Handover', formatSummaryStatus(qpHandoverCount, totalVenues))}${buildSummaryTimeRow('Exam Started', formatSummaryStatus(examStartedCount, totalVenues))}${buildSummaryTimeRow('Extra Q Returned', formatSummaryStatus(extraQCount, totalVenues))}${buildSummaryTimeRow('Exam Closed', formatSummaryStatus(examClosedCount, totalVenues))}${buildSummaryTimeRow('OMR Packed', formatSummaryStatus(omrPackedCount, totalVenues), true)}</div></div><h5 class="text-dark mt-5 mb-4 ps-2 fw-bold d-flex align-items-center"><i class="fa-solid fa-building-columns text-primary fs-4 me-2"></i> Individual Venue Details</h5><div class="row g-4">`;
+        let html = `
+        <div class="card p-4 p-md-5 dac-summary-card mb-4">
+            <h5 class="text-dark m-0 fw-bold mb-4 d-flex align-items-center">
+                <i class="fa-solid fa-chart-line text-primary fs-4 me-2"></i> District Overview
+            </h5>
+            
+            <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4 mb-4 border border-light">
+                <span class="fw-bold text-secondary"><i class="fa-solid fa-clipboard-check text-primary me-2"></i>Attendance Reported</span>
+                <span class="badge ${isAttComplete ? 'bg-success' : 'bg-danger'} bg-opacity-10 ${isAttComplete ? 'text-success' : 'text-danger'} rounded-pill fs-6 px-3 py-2 border border-${isAttComplete ? 'success' : 'danger'} border-opacity-25">${attReportedText}</span>
+            </div>
+            
+            <!-- 4-STAT BOXES INCLUDING TOTAL, PRESENT, ABSENT, PERCENTAGE -->
+            <div class="row text-center mb-4 g-2">
+                <div class="col-6 col-md-3">
+                    <div class="stat-box border-0 bg-light p-2 p-md-3">
+                        <div class="text-secondary small fw-bold mb-1">Total</div>
+                        <div class="fs-4 fw-bold text-dark">${totalCandidates}</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-box border-0 bg-success bg-opacity-10 p-2 p-md-3">
+                        <div class="text-success small fw-bold mb-1">Present</div>
+                        <div class="fs-4 fw-bold text-success">${totalPresent}</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-box border-0 bg-danger bg-opacity-10 p-2 p-md-3">
+                        <div class="text-danger small fw-bold mb-1">Absent</div>
+                        <div class="fs-4 fw-bold text-danger">${totalAbsent}</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-box border-0 bg-primary bg-opacity-10 p-2 p-md-3">
+                        <div class="text-primary small fw-bold mb-1">Percentage</div>
+                        <div class="fs-4 fw-bold text-primary">${overallPercentage}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4 mb-4 border border-light">
+                <div class="text-center w-50 border-end">
+                    <div class="small fw-bold text-success mb-1">Present Details</div>
+                    <div class="fs-6 fw-bold text-dark">${totalPresM} <span class="text-secondary fw-normal">M</span> &nbsp;|&nbsp; ${totalPresF} <span class="text-secondary fw-normal">F</span></div>
+                </div>
+                <div class="text-center w-50">
+                    <div class="small fw-bold text-danger mb-1">Absent Details</div>
+                    <div class="fs-6 fw-bold text-dark">${totalAbsM} <span class="text-secondary fw-normal">M</span> &nbsp;|&nbsp; ${totalAbsF} <span class="text-secondary fw-normal">F</span></div>
+                </div>
+            </div>
+            
+            ${subjectSummaryHtml}
+            
+            <div class="fw-bold mb-3 text-dark mt-2"><i class="fa-solid fa-bars-progress text-primary me-2"></i>Venue Status Tracking</div>
+            <div class="bg-light p-4 rounded-4 border border-light">
+                ${buildSummaryTimeRow('QP Received', formatSummaryStatus(qpReceivedCount, totalVenues))}
+                ${buildSummaryTimeRow('Bag Opened', formatSummaryStatus(bagOpenedCount, totalVenues))}
+                ${buildSummaryTimeRow('QP Handover', formatSummaryStatus(qpHandoverCount, totalVenues))}
+                ${buildSummaryTimeRow('Exam Started', formatSummaryStatus(examStartedCount, totalVenues))}
+                ${buildSummaryTimeRow('Extra Q Returned', formatSummaryStatus(extraQCount, totalVenues))}
+                ${buildSummaryTimeRow('Exam Closed', formatSummaryStatus(examClosedCount, totalVenues))}
+                ${buildSummaryTimeRow('OMR Packed', formatSummaryStatus(omrPackedCount, totalVenues), true)}
+            </div>
+        </div>
+        
+        <h5 class="text-dark mt-5 mb-4 ps-2 fw-bold d-flex align-items-center">
+            <i class="fa-solid fa-building-columns text-primary fs-4 me-2"></i> Individual Venue Details
+        </h5>
+        <div class="row g-4">`;
 
         venues.forEach(v => {
             let displaySubject = "";
