@@ -5,190 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HS EXAM 2027 SEM III</title>
     
-    <!-- Google Fonts: Poppins -->
+    <!-- Google Fonts & Bootstrap -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            /* Saffron (Gerua) Theme Variables */
-            --primary: #FF671F;        
-            --primary-hover: #E65C10;  
-            --primary-light: #FFF0E6;  
-            --primary-gradient: #FF8C42; 
-            
-            --secondary: #64748b;      
-            --dark: #2d1b11;           
-            --success: #059669;        
-            --danger: #e11d48;         
-            --bg-color: #fcf9f6;       
-            --card-bg: #ffffff;
-            --border-color: #e2e8f0;
+            --primary: #FF671F; --primary-hover: #E65C10; --primary-light: #FFF0E6; --primary-gradient: #FF8C42; 
+            --secondary: #64748b; --dark: #2d1b11; --success: #059669; --danger: #e11d48; 
+            --bg-color: #fcf9f6; --card-bg: #ffffff; --border-color: #e2e8f0;
         }
-
-        body { 
-            background-color: var(--bg-color); 
-            font-family: 'Poppins', sans-serif;
-            color: var(--dark);
-            -webkit-font-smoothing: antialiased;
-        }
-        
+        body { background-color: var(--bg-color); font-family: 'Poppins', sans-serif; color: var(--dark); -webkit-font-smoothing: antialiased; }
         .screen { display: none; opacity: 0; }
-        .screen.active { 
-            display: block; 
-            opacity: 1; 
-            animation: slideUpFade 0.4s ease-out forwards;
-        }
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card { 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
-            border-radius: 18px; 
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            box-shadow: 0 8px 25px rgba(255, 103, 31, 0.06);
-        }
-
-        .text-primary { color: var(--primary) !important; }
-        .bg-primary { background-color: var(--primary) !important; color: white !important; }
-        .border-primary { border-color: var(--primary) !important; }
-
+        .screen.active { display: block; opacity: 1; animation: slideUpFade 0.4s ease-out forwards; }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .card { box-shadow: 0 4px 20px rgba(0,0,0,0.03); border-radius: 18px; border: 1px solid var(--border-color); background: var(--card-bg); transition: all 0.3s ease; }
+        .card:hover { box-shadow: 0 8px 25px rgba(255, 103, 31, 0.06); }
+        .text-primary { color: var(--primary) !important; } .bg-primary { background-color: var(--primary) !important; color: white !important; } .border-primary { border-color: var(--primary) !important; }
         .bg-saffron { background: linear-gradient(135deg, var(--primary), var(--primary-gradient)) !important; color: white; }
         .text-saffron { color: var(--primary-hover) !important; }
-        .dac-summary-card { 
-            background: #ffffff; 
-            border-top: 5px solid var(--primary); 
-        }
-
-        .form-control, .form-select {
-            border-radius: 12px;
-            border: 1.5px solid var(--border-color);
-            padding: 12px 16px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            background-color: #fdfdfd;
-            color: var(--dark);
-            transition: all 0.2s ease;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary);
-            background-color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(255, 103, 31, 0.15);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-gradient));
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            padding: 12px;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(255, 103, 31, 0.25);
-        }
-        .btn-primary:hover, .btn-primary:focus {
-            background: linear-gradient(135deg, var(--primary-hover), var(--primary));
-            box-shadow: 0 6px 15px rgba(255, 103, 31, 0.35);
-            transform: translateY(-2px);
-            color: white;
-        }
-
-        /* CHECKBOX DESIGN */
+        .dac-summary-card { background: #ffffff; border-top: 5px solid var(--primary); }
+        .form-control, .form-select { border-radius: 12px; border: 1.5px solid var(--border-color); padding: 12px 16px; font-size: 0.95rem; font-weight: 500; background-color: #fdfdfd; color: var(--dark); transition: all 0.2s ease; }
+        .form-control:focus, .form-select:focus { border-color: var(--primary); background-color: #ffffff; box-shadow: 0 0 0 4px rgba(255, 103, 31, 0.15); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-gradient)); border: none; border-radius: 12px; font-weight: 600; padding: 12px; letter-spacing: 0.5px; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(255, 103, 31, 0.25); }
+        .btn-primary:hover, .btn-primary:focus { background: linear-gradient(135deg, var(--primary-hover), var(--primary)); box-shadow: 0 6px 15px rgba(255, 103, 31, 0.35); transform: translateY(-2px); color: white; }
         .subject-checkbox { display: none; }
-        .subject-label {
-            display: flex; align-items: center; padding: 12px 20px; background: #f8fafc;
-            border-radius: 12px; cursor: pointer; transition: all 0.3s ease;
-            border: 2px solid #e2e8f0; margin: 0; width: 100%;
-        }
+        .subject-label { display: flex; align-items: center; padding: 12px 20px; background: #f8fafc; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e2e8f0; margin: 0; width: 100%; }
         .subject-label:hover { border-color: #cbd5e1; background: #f1f5f9; }
-        .subject-label .check-box {
-            width: 24px; height: 24px; min-width: 24px; border-radius: 6px; border: 2px solid #cbd5e1;
-            margin-right: 14px; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s ease; background: white;
-        }
-        .subject-label .check-box i {
-            color: white; font-size: 14px; opacity: 0; transform: scale(0.5);
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .subject-label .check-box { width: 24px; height: 24px; min-width: 24px; border-radius: 6px; border: 2px solid #cbd5e1; margin-right: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; background: white; }
+        .subject-label .check-box i { color: white; font-size: 14px; opacity: 0; transform: scale(0.5); transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .subject-label .subject-text { color: var(--secondary); font-size: 0.95rem; font-weight: 600; line-height: 1.3; }
-        
         .subject-checkbox:checked + .subject-label { background: var(--primary-light); border-color: var(--primary); box-shadow: 0 4px 15px rgba(255, 103, 31, 0.15); }
         .subject-checkbox:checked + .subject-label .check-box { background: var(--primary); border-color: var(--primary); }
         .subject-checkbox:checked + .subject-label .check-box i { opacity: 1; transform: scale(1); }
         .subject-checkbox:checked + .subject-label .subject-text { color: var(--primary-hover); }
-
         .form-section-title { color: var(--dark); font-size: 1.1rem; font-weight: 700; margin-top: 30px; margin-bottom: 20px; display: flex; align-items: center; }
         .form-section-title i { color: var(--primary); margin-right: 10px; background: var(--primary-light); padding: 8px; border-radius: 10px; font-size: 1rem; }
-
-        /* MANUAL TIME ENTRY GROUP */
         .time-entry-group { border-radius: 12px; border: 1.5px solid var(--border-color); display: flex; overflow: hidden; background: #fdfdfd; transition: all 0.2s ease; }
         .time-entry-group:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(255, 103, 31, 0.15); background: #ffffff; }
         .time-entry-group input { border: none; background: transparent; box-shadow: none !important; border-radius: 0; flex-grow: 1; }
         .time-entry-group select { border: none; background: #f1f5f9; color: var(--primary); box-shadow: none !important; border-radius: 0; border-left: 1px solid var(--border-color); cursor: pointer; width: auto; }
-
-        /* DISABLED STATE OVERLAY */
-        .form-overlay-disabled {
-            opacity: 0.4 !important;
-            pointer-events: none !important;
-            user-select: none !important;
-            filter: grayscale(100%) !important;
-            transition: all 0.3s ease;
-        }
-
-        /* TOP FLOATING TOAST NOTIFICATION */
-        #save-status-bar {
-            position: fixed; 
-            top: 25px;
-            left: 50%; 
-            transform: translate(-50%, -100px);
-            opacity: 0; 
-            visibility: hidden; 
-            background: rgba(255, 255, 255, 0.98); 
-            backdrop-filter: blur(16px); 
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 103, 31, 0.2); 
-            padding: 14px 32px;
-            text-align: center; 
-            font-weight: 700; 
-            font-size: 1.05rem; 
-            z-index: 99999;
-            border-radius: 50px; 
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 12px;
-            min-width: fit-content; 
-            white-space: nowrap; 
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        #save-status-bar.show { 
-            transform: translate(-50%, 0); 
-            opacity: 1; 
-            visibility: visible; 
-        }
-
+        .form-overlay-disabled { opacity: 0.4 !important; pointer-events: none !important; user-select: none !important; filter: grayscale(100%) !important; transition: all 0.3s ease; }
+        #save-status-bar { position: fixed; top: 25px; left: 50%; transform: translate(-50%, -100px); opacity: 0; visibility: hidden; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 103, 31, 0.2); padding: 14px 32px; text-align: center; font-weight: 700; font-size: 1.05rem; z-index: 99999; border-radius: 50px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); display: flex; align-items: center; justify-content: center; gap: 12px; min-width: fit-content; white-space: nowrap; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        #save-status-bar.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
         .badge { font-weight: 600; padding: 6px 12px; }
-        .text-success { color: var(--success) !important; }
-        .text-danger { color: var(--danger) !important; }
-        
+        .text-success { color: var(--success) !important; } .text-danger { color: var(--danger) !important; }
         .fa-circle-dot.pulse { animation: pulseIcon 1.5s infinite; }
         @keyframes pulseIcon { 0% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.7; } }
-
         .header-brand { width: 60px; height: 60px; background: var(--primary-light); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 15px; }
-        
         .stat-box { background-color: #fdfdfd; border: 1px solid var(--border-color); border-radius: 14px; padding: 12px 8px; height: 100%; display: flex; flex-direction: column; justify-content: center; transition: all 0.2s; }
         .stat-box:hover { background-color: #ffffff; border-color: rgba(255, 103, 31, 0.3); }
-
         .login-footer-banner { display: inline-block; background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px; padding: 15px 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.3s ease; }
         .login-footer-banner:hover { box-shadow: 0 6px 20px rgba(255, 103, 31, 0.08); border-color: rgba(255, 103, 31, 0.2); }
     </style>
@@ -227,18 +94,6 @@
             <div id="login-error" class="text-danger mt-3 text-center small fw-bold d-none"><i class="fa-solid fa-triangle-exclamation me-1"></i> Invalid Credentials</div>
         </form>
     </div>
-
-    <!-- Banner -->
-    <div class="text-center mt-5">
-        <div class="login-footer-banner">
-            <div class="fw-bold text-dark mb-1" style="font-size: 0.95rem;">
-                <i class="fa-solid fa-building-shield text-primary opacity-75 me-1"></i> Maintained by ABRSM (SE) JHARGRAM
-            </div>
-            <div class="fw-medium text-secondary mt-2" style="font-size: 0.75rem;">
-                <i class="fa-solid fa-laptop-code text-primary opacity-75 me-1"></i> Developed by <strong class="text-dark">Nirmalendu Mandal</strong>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- CHANGE PIN SCREEN -->
@@ -263,7 +118,12 @@
         <div class="pe-2">
             <h4 id="entry-title" class="text-saffron fw-bold m-0 lh-sm"></h4>
             <div id="entry-subtitle" class="text-secondary small fw-bold mt-1 mb-2"></div>
-            <span class="badge bg-saffron rounded-pill"><i class="fa-solid fa-user-check me-1"></i> Nominee Panel</span>
+            
+            <!-- LOCATION STATUS BADGE -->
+            <div id="nominee-location-badge" class="badge bg-light text-secondary border rounded-pill mt-1">
+                <i class="fa-solid fa-spinner fa-spin me-1"></i> Checking GPS...
+            </div>
+
         </div>
         <button class="btn btn-light text-danger shadow-sm fw-bold border border-light rounded-circle p-2 flex-shrink-0" onclick="logout()" style="width: 45px; height: 45px;" title="Logout">
             <i class="fa-solid fa-power-off"></i>
@@ -279,9 +139,6 @@
     <div id="subjects-container-wrapper" class="card p-4 mb-4 border-0">
         <label class="form-label text-dark fw-bold mb-3 fs-5"><i class="fa-solid fa-book-open text-primary me-2"></i>Today's Subjects</label>
         <div id="subject-checkboxes-container" class="mt-1 row g-2"></div>
-        <div class="small text-secondary mt-4 border-top pt-3 fw-medium">
-            <i class="fa-solid fa-circle-info text-primary me-1"></i> Please check the subjects being conducted today.
-        </div>
     </div>
 
     <form id="data-entry-form">
@@ -391,7 +248,6 @@
             </div>
         </div>
     </form>
-
     <div id="save-status-bar"><i class="fa-solid fa-circle-notch text-secondary" id="status-icon"></i><span id="save-text">Data Fetched</span></div>
 </div>
 
@@ -432,46 +288,118 @@
         '3318_305650', '3320_305392'
     ];
     
-    const allDates = [
-        '21/09/26', '24/09/26', '25/09/26', '28/09/26', '29/09/26', 
-        '30/09/26', '01/10/26', '03/10/26', '12/10/26', 
-        '13/10/26 (1st Half)', '13/10/26 (2nd Half)', '14/10/26'
-    ];
+    const allDates = ['21/09/26', '24/09/26', '25/09/26', '28/09/26', '29/09/26', '30/09/26', '01/10/26', '03/10/26', '12/10/26', '13/10/26 (1st Half)', '13/10/26 (2nd Half)', '14/10/26'];
 
     const timeFields = ['qpReceived', 'qpBagOpened', 'qpHandover', 'examStarted', 'extraQReturned', 'examClosed', 'omrPacked'];
     const numberFields = ['presentMale', 'presentFemale', 'absentMale', 'absentFemale'];
+
+    // ==========================================
+    // GPS GEO-FENCING LOGIC (27 CENTRES)
+    // ==========================================
+    const venueCoords = {
+        '3301_305085': { lat: 22.4497, lng: 86.9856 }, // 1. JHARGRAM KUMUD KUMARI INSTITUTION
+        '3302_305259': { lat: 22.2700, lng: 86.9100 }, // 2. TAPSIA VIDYASAGAR SIKSHAYATAN
+        '3302_305679': { lat: 22.2800, lng: 86.9200 }, // 3. RANTUA HIGH SCHOOL
+        '3303_305200': { lat: 22.6300, lng: 86.8000 }, // 4. SILDA R.C. INSTITUTION
+        '3304_305314': { lat: 22.4500, lng: 86.8700 }, // 5. CHILKIGARH I.C. INSTITUTION
+        '3304_305817': { lat: 22.4500, lng: 86.8500 }, // 6. JAMBONI BANI VIDYAPITH
+        '3305_305100': { lat: 22.1700, lng: 87.1600 }, // 7. KULTIKRI S.C. HIGH SCHOOL
+        '3306_305223': { lat: 22.5800, lng: 86.9200 }, // 8. BINPUR HIGH SCHOOL
+        '3307_305126': { lat: 22.2100, lng: 86.8900 }, // 9. NAYABASAN JANAKALYAN VIDYAPITH
+        '3307_305658': { lat: 22.2200, lng: 86.9000 }, // 10. BANSDA HIGH SCHOOL
+        '3308_305400': { lat: 22.0300, lng: 87.1800 }, // 11. NAYAGRAM THANA BALIKA VIDYALAYAYA
+        '3308_305702': { lat: 22.0400, lng: 87.1700 }, // 12. BALIGERIA BALIKA VIDYAPITH
+        '3309_305668': { lat: 22.3800, lng: 87.0500 }, // 13. PETBINDHI D.K.M. HIGH SCHOOL
+        '3310_305687': { lat: 22.6100, lng: 86.8000 }, // 14. KANTAPAHARI VIVEKANANDA VIDYAPITH
+        '3311_305301': { lat: 22.6300, lng: 86.7600 }, // 15. BELPAHARI S.C. HIGH SCHOOL
+        '3312_305334': { lat: 22.3300, lng: 87.0300 }, // 16. DUDHKUNDI BAPUJI SIKSHAYATAN
+        '3312_305600': { lat: 22.3700, lng: 87.1200 }, // 17. BALIKA VIDYALAYA MANIKPARA
+        '3312_305834': { lat: 22.3600, lng: 87.1000 }, // 18. GOJASIMUL K.C.M. HIGH SCHOOL
+        '3313_305857': { lat: 22.1000, lng: 87.1100 }, // 19. ROHINI BALIKA VIDYALAYA
+        '3314_305646': { lat: 22.1500, lng: 87.1500 }, // 20. ANDHARIYA RAJBALLAV HIGH SCHOOL
+        '3315_305671': { lat: 22.5000, lng: 87.0000 }, // 21. ASHUI PALLIMANGAL VIDYAPITH
+        '3316_305746': { lat: 22.2500, lng: 87.1000 }, // 22. KESHIAPATA G.M. HIGH SCHOOL
+        '3317_305277': { lat: 22.4500, lng: 86.9800 }, // 23. JHARGRAM ASOKE VIDYAPITH
+        '3317_305278': { lat: 22.4500, lng: 86.9800 }, // 24. JHARGRAM BANITIRTHA HIGH SCHOOL
+        '3317_305292': { lat: 22.4500, lng: 86.9800 }, // 25. JHARGRAM NANIBALA BALIKA VIDYALAYA
+        '3318_305650': { lat: 22.4600, lng: 86.9500 }, // 26. DHOLKAT PUKURIA PRANABANANDA VIDYAMANDIR
+        '3320_305392': { lat: 22.1500, lng: 87.0500 }  // 27. CHANDABILA S.C. HIGH SCHOOL
+    };
 
     let activeUser = "";
     let saveTimeout;
     let statusTimeout;
     let examRoutine = {}; 
     let dacPollInterval = null;
+    let currentLocationStatus = "Pending";
 
-    function logout() {
-        localStorage.clear();
-        location.reload();
+    // Haversine Formula (দূরত্ব মাপার সূত্র)
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371e3; // meters
+        const p1 = lat1 * Math.PI/180;
+        const p2 = lat2 * Math.PI/180;
+        const dp = (lat2-lat1) * Math.PI/180;
+        const dl = (lon2-lon1) * Math.PI/180;
+        const a = Math.sin(dp/2) * Math.sin(dp/2) + Math.cos(p1) * Math.cos(p2) * Math.sin(dl/2) * Math.sin(dl/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
     }
 
-    window.onload = async () => {
-        const loginBtn = document.getElementById('login-btn');
-        loginBtn.disabled = true; 
+    function checkVenueLocation() {
+        const badge = document.getElementById('nominee-location-badge');
+        if (!navigator.geolocation) {
+            currentLocationStatus = "Not Supported";
+            badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation me-1"></i> GPS Error`;
+            badge.className = "badge bg-secondary bg-opacity-10 text-secondary border border-secondary rounded-pill mt-1";
+            return;
+        }
 
-        populateSelect('centre-select', centreCodes);
-        populateSelect('dac-date-select', allDates);
-        populateSelect('entry-date-select', allDates);
+        navigator.geolocation.getCurrentPosition(pos => {
+            const userLat = pos.coords.latitude;
+            const userLng = pos.coords.longitude;
+            const centre = venueCoords[activeUser];
+
+            if (centre) {
+                const dist = calculateDistance(userLat, userLng, centre.lat, centre.lng);
+                if (dist <= 1000) { // ১ কিলোমিটারের (1000m) মধ্যে থাকলে Matched
+                    currentLocationStatus = "Matched";
+                    badge.innerHTML = `<i class="fa-solid fa-location-dot me-1"></i> Loc: Matched`;
+                    badge.className = "badge bg-success bg-opacity-10 text-success border border-success rounded-pill mt-1";
+                } else { // দূরে থাকলে Not Matched
+                    currentLocationStatus = "Not Matched";
+                    badge.innerHTML = `<i class="fa-solid fa-location-crosshairs me-1"></i> Loc: Not Matched`;
+                    badge.className = "badge bg-warning bg-opacity-10 text-warning border border-warning rounded-pill mt-1";
+                }
+            } else {
+                currentLocationStatus = "Coords Missing";
+                badge.innerHTML = `<i class="fa-solid fa-map-location-dot me-1"></i> System Update Needed`;
+                badge.className = "badge bg-secondary bg-opacity-10 text-secondary border border-secondary rounded-pill mt-1";
+            }
+        }, err => {
+            currentLocationStatus = "Denied";
+            badge.innerHTML = `<i class="fa-solid fa-location-crosshairs me-1"></i> GPS Denied`;
+            badge.className = "badge bg-danger bg-opacity-10 text-danger border border-danger rounded-pill mt-1";
+        }, { enableHighAccuracy: true, timeout: 10000 });
+    }
+
+    // ==========================================
+    // BASIC FUNCTIONS
+    // ==========================================
+    function logout() { localStorage.clear(); location.reload(); }
+
+    window.onload = async () => {
+        const loginBtn = document.getElementById('login-btn'); loginBtn.disabled = true; 
+        populateSelect('centre-select', centreCodes); populateSelect('dac-date-select', allDates); populateSelect('entry-date-select', allDates);
 
         try {
             const res = await submitToGoogle('getConfig', {});
             if (res.status === 'success') { examRoutine = res.routine; }
-        } catch (e) {
-            console.error("Could not load dynamic routine.");
-        }
+        } catch (e) { console.error("Could not load dynamic routine."); }
 
         updateDatesForCentre();
         document.getElementById('centre-select').addEventListener('change', updateDatesForCentre);
         
-        loginBtn.innerHTML = `<i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Secure Login`;
-        loginBtn.disabled = false;
+        loginBtn.innerHTML = `<i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Secure Login`; loginBtn.disabled = false;
 
         const savedRole = localStorage.getItem('hs_exam_role');
         const savedCode = localStorage.getItem('hs_exam_code');
@@ -486,48 +414,30 @@
         }
     };
 
-    function populateSelect(id, options) {
-        const select = document.getElementById(id);
-        options.forEach(opt => select.add(new Option(opt, opt)));
-    }
-
-    function getTodayStr() {
-        const d = new Date();
-        return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth()+1).padStart(2, '0')}/${String(d.getFullYear()).slice(-2)}`;
-    }
+    function populateSelect(id, options) { const select = document.getElementById(id); options.forEach(opt => select.add(new Option(opt, opt))); }
+    function getTodayStr() { const d = new Date(); return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth()+1).padStart(2, '0')}/${String(d.getFullYear()).slice(-2)}`; }
 
     function showScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
-
         if (dacPollInterval) { clearInterval(dacPollInterval); dacPollInterval = null; }
-        if (screenId === 'dac-dashboard-screen') {
-            dacPollInterval = setInterval(() => { fetchDacData(true); }, 15000); 
-        }
+        if (screenId === 'dac-dashboard-screen') { dacPollInterval = setInterval(() => { fetchDacData(true); }, 15000); }
     }
 
     function updateDatesForCentre() {
         const role = document.getElementById('role-select').value;
         const dateSelect = document.getElementById('date-select');
         dateSelect.innerHTML = ''; 
-
         if (role === 'DAC') {
             allDates.forEach(opt => dateSelect.add(new Option(opt, opt)));
         } else {
             const selectedCentre = document.getElementById('centre-select').value;
             const allowedDates = examRoutine[selectedCentre] ? examRoutine[selectedCentre].dates : allDates; 
-
-            if (allowedDates.length === 0) {
-                dateSelect.add(new Option("No Exam Today", ""));
-            } else {
-                allowedDates.forEach(opt => dateSelect.add(new Option(opt, opt)));
-            }
+            if (allowedDates.length === 0) dateSelect.add(new Option("No Exam Today", ""));
+            else allowedDates.forEach(opt => dateSelect.add(new Option(opt, opt)));
         }
-        
         const todayStr = getTodayStr();
-        if (Array.from(dateSelect.options).some(opt => opt.value === todayStr)) {
-            dateSelect.value = todayStr;
-        }
+        if (Array.from(dateSelect.options).some(opt => opt.value === todayStr)) dateSelect.value = todayStr;
     }
 
     function toggleLoginFields() {
@@ -537,8 +447,7 @@
     }
 
     async function submitToGoogle(action, data) {
-        const formData = new URLSearchParams();
-        formData.append('action', action);
+        const formData = new URLSearchParams(); formData.append('action', action);
         for (const key in data) formData.append(key, data[key] || "");
         const res = await fetch(scriptUrl, { method: 'POST', body: formData });
         return await res.json();
@@ -546,139 +455,82 @@
 
     document.getElementById('login-form').onsubmit = async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('login-btn');
-        const err = document.getElementById('login-error');
-        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Connecting...`; 
-        btn.disabled = true; err.classList.add('d-none');
-
+        const btn = document.getElementById('login-btn'); const err = document.getElementById('login-error');
+        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Connecting...`; btn.disabled = true; err.classList.add('d-none');
         const role = document.getElementById('role-select').value;
         const code = role === 'DAC' ? 'DAC' : document.getElementById('centre-select').value;
-        const pin = document.getElementById('pin-input').value;
-        const date = document.getElementById('date-select').value;
+        const pin = document.getElementById('pin-input').value; const date = document.getElementById('date-select').value;
 
         if (role === 'DAC' && pin === '721507') {
-            activeUser = code;
-            localStorage.setItem('hs_exam_role', role);
-            localStorage.setItem('hs_exam_code', code);
-            localStorage.setItem('hs_exam_pin', pin);
-
+            activeUser = code; localStorage.setItem('hs_exam_role', role); localStorage.setItem('hs_exam_code', code); localStorage.setItem('hs_exam_pin', pin);
             document.getElementById('dac-date-select').value = date;
-            showScreen('dac-dashboard-screen');
-            fetchDacData(false); 
-            return;
+            showScreen('dac-dashboard-screen'); fetchDacData(false); return;
         }
 
         try {
             const data = await submitToGoogle('login', { code, pin });
             if (data.status === 'success') {
-                activeUser = code;
-                localStorage.setItem('hs_exam_role', role);
-                localStorage.setItem('hs_exam_code', code);
-                localStorage.setItem('hs_exam_pin', pin);
-
+                activeUser = code; localStorage.setItem('hs_exam_role', role); localStorage.setItem('hs_exam_code', code); localStorage.setItem('hs_exam_pin', pin);
                 if (data.forceChange === true || data.forceChange === 'TRUE') {
                     showScreen('change-pin-screen');
                 } else {
                     document.getElementById('entry-title').innerHTML = `<i class="fa-solid fa-user-tie me-2"></i>${data.nomineeName}`;
                     document.getElementById('entry-subtitle').innerHTML = `<i class="fa-solid fa-school me-1"></i> ${data.centreName} (${code})`;
-                    
-                    const entrySelect = document.getElementById('entry-date-select');
-                    entrySelect.innerHTML = '';
+                    const entrySelect = document.getElementById('entry-date-select'); entrySelect.innerHTML = '';
                     const allowed = examRoutine[code] ? examRoutine[code].dates : allDates;
                     allowed.forEach(opt => entrySelect.add(new Option(opt, opt)));
-                    if (allowed.includes(date)) entrySelect.value = date;
-                    else if (allowed.length > 0) entrySelect.value = allowed[0];
-
-                    showScreen('data-entry-screen');
-                    loadDataForDate(); 
+                    if (allowed.includes(date)) entrySelect.value = date; else if (allowed.length > 0) entrySelect.value = allowed[0];
+                    showScreen('data-entry-screen'); loadDataForDate();
+                    checkVenueLocation(); // Trigger Geo-fencing calculation
                 }
-            } else {
-                err.innerHTML = `<i class="fa-solid fa-triangle-exclamation me-1"></i> Invalid PIN or Credentials`;
-                err.classList.remove('d-none'); localStorage.clear(); 
-            }
-        } catch (error) {
-            err.innerHTML = `<i class="fa-solid fa-wifi me-1"></i> Network Error. Please try again.`;
-            err.classList.remove('d-none');
-        }
-        btn.innerHTML = `<i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Secure Login`; 
-        btn.disabled = false;
+            } else { err.innerHTML = `<i class="fa-solid fa-triangle-exclamation me-1"></i> Invalid PIN or Credentials`; err.classList.remove('d-none'); localStorage.clear(); }
+        } catch (error) { err.innerHTML = `<i class="fa-solid fa-wifi me-1"></i> Network Error. Please try again.`; err.classList.remove('d-none'); }
+        btn.innerHTML = `<i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Secure Login`; btn.disabled = false;
     };
 
     document.getElementById('pin-form').onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('pin-btn');
+        e.preventDefault(); const btn = document.getElementById('pin-btn');
         btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Saving...`; btn.disabled = true;
         const newPin = document.getElementById('new-pin').value;
-        
         try {
             const res = await submitToGoogle('changePin', { code: activeUser, newPin: newPin });
             if (res.status === 'success') {
                 localStorage.setItem('hs_exam_pin', newPin);
                 document.getElementById('entry-title').innerHTML = `<i class="fa-solid fa-user-tie me-2"></i>${res.nomineeName}`;
                 document.getElementById('entry-subtitle').innerHTML = `<i class="fa-solid fa-school me-1"></i> ${res.centreName} (${activeUser})`;
-
                 const date = document.getElementById('date-select').value;
-                const entrySelect = document.getElementById('entry-date-select');
-                entrySelect.innerHTML = '';
+                const entrySelect = document.getElementById('entry-date-select'); entrySelect.innerHTML = '';
                 const allowed = examRoutine[activeUser] ? examRoutine[activeUser].dates : allDates;
                 allowed.forEach(opt => entrySelect.add(new Option(opt, opt)));
-                if (allowed.includes(date)) entrySelect.value = date;
-                else if (allowed.length > 0) entrySelect.value = allowed[0];
-
-                showScreen('data-entry-screen');
-                loadDataForDate(); 
+                if (allowed.includes(date)) entrySelect.value = date; else if (allowed.length > 0) entrySelect.value = allowed[0];
+                showScreen('data-entry-screen'); loadDataForDate(); checkVenueLocation(); // Check location here too
             } else { alert("Error changing PIN"); }
         } catch (error) { alert("Error changing PIN"); }
         btn.innerHTML = `<i class="fa-solid fa-floppy-disk me-2"></i> Save & Continue`; btn.disabled = false;
     };
 
     function renderSubjectCheckboxes(day) {
-        const container = document.getElementById('subject-checkboxes-container');
-        container.innerHTML = ''; 
-
+        const container = document.getElementById('subject-checkboxes-container'); container.innerHTML = ''; 
         const allowed = examRoutine[activeUser];
         if (allowed && allowed.dayMap && allowed.dayMap[day]) {
-            const subjStr = allowed.dayMap[day];
-            const subjArr = subjStr.split(/[\+]/).map(s => s.trim()).filter(s => s !== "");
-            
-            if (subjArr.length === 0 || (subjArr.length === 1 && subjArr[0] === "Subject Not Specified")) {
-                 container.innerHTML = '<div class="col-12"><span class="text-muted small"><i class="fa-solid fa-ban me-1"></i> No specific subjects defined in routine.</span></div>';
-                 return;
-            }
+            const subjArr = allowed.dayMap[day].split(/[\+]/).map(s => s.trim()).filter(s => s !== "");
+            if (subjArr.length === 0 || (subjArr.length === 1 && subjArr[0] === "Subject Not Specified")) { container.innerHTML = '<div class="col-12"><span class="text-muted small"><i class="fa-solid fa-ban me-1"></i> No specific subjects defined.</span></div>'; return; }
             subjArr.forEach(subj => {
-                const cleanId = subj.replace(/\s/g, '');
-                const div = document.createElement('div');
-                div.className = 'col-12 col-md-6';
-                div.innerHTML = `
-                    <input class="subject-checkbox" type="checkbox" value="${subj}" id="chk_${cleanId}" onchange="debounceSave()">
-                    <label class="subject-label" for="chk_${cleanId}">
-                        <div class="check-box"><i class="fa-solid fa-check"></i></div>
-                        <span class="subject-text">${subj}</span>
-                    </label>
-                `;
+                const cleanId = subj.replace(/\s/g, ''); const div = document.createElement('div'); div.className = 'col-12 col-md-6';
+                div.innerHTML = `<input class="subject-checkbox" type="checkbox" value="${subj}" id="chk_${cleanId}" onchange="debounceSave()"><label class="subject-label" for="chk_${cleanId}"><div class="check-box"><i class="fa-solid fa-check"></i></div><span class="subject-text">${subj}</span></label>`;
                 container.appendChild(div);
             });
-        } else {
-            container.innerHTML = '<div class="col-12"><span class="text-muted small"><i class="fa-regular fa-calendar-xmark me-1"></i> No subjects assigned for this day.</span></div>';
-        }
+        } else { container.innerHTML = '<div class="col-12"><span class="text-muted small"><i class="fa-regular fa-calendar-xmark me-1"></i> No subjects assigned.</span></div>'; }
     }
 
     function updateStatusBar(iconClass, text, colorCode, autoHide = false) {
         const bar = document.getElementById('save-status-bar');
-        const icon = document.getElementById('status-icon');
-        const textSpan = document.getElementById('save-text');
-        
-        icon.className = `fa-solid ${iconClass}`;
-        icon.style.color = colorCode;
-        textSpan.innerText = text;
-        textSpan.style.color = colorCode;
-        
+        document.getElementById('status-icon').className = `fa-solid ${iconClass}`;
+        document.getElementById('status-icon').style.color = colorCode;
+        document.getElementById('save-text').innerText = text;
+        document.getElementById('save-text').style.color = colorCode;
         bar.classList.add('show');
-        
-        clearTimeout(statusTimeout);
-        if (autoHide) {
-            statusTimeout = setTimeout(() => { bar.classList.remove('show'); }, 3000); 
-        }
+        clearTimeout(statusTimeout); if (autoHide) { statusTimeout = setTimeout(() => { bar.classList.remove('show'); }, 3000); }
     }
 
     function formatTimeInput(input) {
@@ -691,189 +543,100 @@
     function getCombinedTime(id) {
         const timeVal = document.getElementById(id + '_time').value.trim();
         if (!timeVal || timeVal.length < 4) return "";
-        const ampmVal = document.getElementById(id + '_ampm').value;
-        return timeVal + " " + ampmVal;
+        return timeVal + " " + document.getElementById(id + '_ampm').value;
     }
 
     function setCombinedTime(id, fullVal, defaultAmpm) {
-        const timeEl = document.getElementById(id + '_time');
-        const ampmEl = document.getElementById(id + '_ampm');
-        if (!fullVal || fullVal === 'Pending') {
-            timeEl.value = ""; ampmEl.value = defaultAmpm; return;
-        }
+        const timeEl = document.getElementById(id + '_time'); const ampmEl = document.getElementById(id + '_ampm');
+        if (!fullVal || fullVal === 'Pending') { timeEl.value = ""; ampmEl.value = defaultAmpm; return; }
         let valStr = String(fullVal).toUpperCase();
-        
-        if (valStr.includes('GMT')) {
-            let d = new Date(fullVal);
-            if (!isNaN(d.getTime())) {
-                let h = d.getHours(); let m = d.getMinutes();
-                let ampm = h >= 12 ? 'PM' : 'AM';
-                h = h % 12; h = h ? h : 12;
-                valStr = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ' ' + ampm;
-            }
-        } else if (valStr.split(':').length === 3 && !valStr.includes('M')) {
-            let parts = valStr.split(':'); let h = parseInt(parts[0], 10);
-            let ampm = h >= 12 ? 'PM' : 'AM'; h = h % 12; h = h ? h : 12;
-            valStr = String(h).padStart(2, '0') + ':' + parts[1] + ' ' + ampm;
-        }
-        
-        if (valStr.includes('PM')) {
-            ampmEl.value = 'PM'; timeEl.value = valStr.replace('PM', '').trim();
-        } else if (valStr.includes('AM')) {
-            ampmEl.value = 'AM'; timeEl.value = valStr.replace('AM', '').trim();
-        } else {
-            timeEl.value = valStr.trim(); ampmEl.value = defaultAmpm;
-        }
+        if (valStr.includes('PM')) { ampmEl.value = 'PM'; timeEl.value = valStr.replace('PM', '').trim(); } 
+        else if (valStr.includes('AM')) { ampmEl.value = 'AM'; timeEl.value = valStr.replace('AM', '').trim(); } 
+        else { timeEl.value = valStr.trim(); ampmEl.value = defaultAmpm; }
     }
 
     function populateFormFields(data) {
-        setCombinedTime('qpReceived', data.qpReceived, 'AM');
-        setCombinedTime('qpBagOpened', data.qpBagOpened, 'AM');
-        setCombinedTime('qpHandover', data.qpHandover, 'AM');
-        setCombinedTime('examStarted', data.examStarted, 'AM');
-        setCombinedTime('extraQReturned', data.extraQReturned, 'AM');
-        setCombinedTime('examClosed', data.examClosed, 'PM');
-        setCombinedTime('omrPacked', data.omrPacked, 'PM');
-        
+        setCombinedTime('qpReceived', data.qpReceived, 'AM'); setCombinedTime('qpBagOpened', data.qpBagOpened, 'AM'); setCombinedTime('qpHandover', data.qpHandover, 'AM'); setCombinedTime('examStarted', data.examStarted, 'AM');
+        setCombinedTime('extraQReturned', data.extraQReturned, 'AM'); setCombinedTime('examClosed', data.examClosed, 'PM'); setCombinedTime('omrPacked', data.omrPacked, 'PM');
         numberFields.forEach(f => { document.getElementById(f).value = data[f] || ""; });
-        
         if (data.selectedSubjects) {
             const savedSubjs = data.selectedSubjects.split(',').map(s => s.trim());
-            document.querySelectorAll('.subject-checkbox').forEach(chk => {
-                chk.checked = savedSubjs.includes(chk.value);
-            });
+            document.querySelectorAll('.subject-checkbox').forEach(chk => { chk.checked = savedSubjs.includes(chk.value); });
         }
     }
 
     function setFormDisabled(disabled) {
-        const form = document.getElementById('data-entry-form');
-        const subjectsBox = document.getElementById('subjects-container-wrapper');
-        const dateSelect = document.getElementById('entry-date-select');
-        
-        if (disabled) {
-            form.classList.add('form-overlay-disabled');
-            subjectsBox.classList.add('form-overlay-disabled');
-            dateSelect.disabled = true;
-        } else {
-            form.classList.remove('form-overlay-disabled');
-            subjectsBox.classList.remove('form-overlay-disabled');
-            dateSelect.disabled = false;
-        }
+        const form = document.getElementById('data-entry-form'); const subjectsBox = document.getElementById('subjects-container-wrapper'); const dateSelect = document.getElementById('entry-date-select');
+        if (disabled) { form.classList.add('form-overlay-disabled'); subjectsBox.classList.add('form-overlay-disabled'); dateSelect.disabled = true; } 
+        else { form.classList.remove('form-overlay-disabled'); subjectsBox.classList.remove('form-overlay-disabled'); dateSelect.disabled = false; }
     }
 
-    // STRICT FETCHING SEQUENCE WITH AUTO-RETRY
     async function loadDataForDate() {
-        setFormDisabled(true);
-        updateStatusBar('fa-arrows-rotate fa-spin', 'Data Fetching...', 'var(--primary)');
-        
+        setFormDisabled(true); updateStatusBar('fa-arrows-rotate fa-spin', 'Data Fetching...', 'var(--primary)');
         await new Promise(resolve => setTimeout(resolve, 100));
-        
-        const day = document.getElementById('entry-date-select').value;
-        renderSubjectCheckboxes(day);
-        
-        timeFields.forEach(f => { document.getElementById(f + '_time').value = ""; });
-        numberFields.forEach(f => { document.getElementById(f).value = ""; });
+        const day = document.getElementById('entry-date-select').value; renderSubjectCheckboxes(day);
+        timeFields.forEach(f => { document.getElementById(f + '_time').value = ""; }); numberFields.forEach(f => { document.getElementById(f).value = ""; });
 
         try {
             const res = await submitToGoogle('getData', { code: activeUser, day: day });
-            
             if (res.status === 'success' && res.data) {
-                populateFormFields(res.data);
-                updateStatusBar('fa-check-circle', 'Data Fetched Successfully!', 'var(--success)', true);
+                populateFormFields(res.data); updateStatusBar('fa-check-circle', 'Data Fetched Successfully!', 'var(--success)', true);
                 setFormDisabled(false);
             } else {
-                document.getElementById('examClosed_ampm').value = 'PM';
-                document.getElementById('omrPacked_ampm').value = 'PM';
+                document.getElementById('examClosed_ampm').value = 'PM'; document.getElementById('omrPacked_ampm').value = 'PM';
                 updateStatusBar('fa-check-circle', 'Form Ready for Entry', 'var(--success)', true);
                 setFormDisabled(false);
             }
-            
         } catch (e) {
-            updateStatusBar('fa-triangle-exclamation', 'Network Error - Retrying...', 'var(--danger)');
-            setTimeout(loadDataForDate, 3000);
+            updateStatusBar('fa-triangle-exclamation', 'Network Error - Retrying...', 'var(--danger)'); setTimeout(loadDataForDate, 3000);
         }
     }
 
-    // DATA SAVING SEQUENCE WITH AUTO-RETRY
     function debounceSave() {
         updateStatusBar('fa-cloud-arrow-up fa-bounce', 'Data Saving...', '#FF8C42');
-        clearTimeout(saveTimeout);
-        saveTimeout = setTimeout(() => triggerSave(), 1500); 
+        clearTimeout(saveTimeout); saveTimeout = setTimeout(() => triggerSave(), 1500); 
     }
 
     async function triggerSave() {
         const day = document.getElementById('entry-date-select').value;
-        const selectedSubjs = [];
-        document.querySelectorAll('.subject-checkbox').forEach(chk => { if (chk.checked) selectedSubjs.push(chk.value); });
+        const selectedSubjs = []; document.querySelectorAll('.subject-checkbox').forEach(chk => { if (chk.checked) selectedSubjs.push(chk.value); });
         
+        // Location Status added to payload
         const data = {
-            code: activeUser,
-            day: day,
-            qpReceived: getCombinedTime('qpReceived'),
-            qpBagOpened: getCombinedTime('qpBagOpened'),
-            qpHandover: getCombinedTime('qpHandover'),
-            examStarted: getCombinedTime('examStarted'),
-            presentMale: document.getElementById('presentMale').value,
-            presentFemale: document.getElementById('presentFemale').value,
-            absentMale: document.getElementById('absentMale').value,
-            absentFemale: document.getElementById('absentFemale').value,
-            extraQReturned: getCombinedTime('extraQReturned'),
-            examClosed: getCombinedTime('examClosed'),
-            omrPacked: getCombinedTime('omrPacked'),
-            selectedSubjects: selectedSubjs.join(', ')
+            code: activeUser, day: day, locationStatus: currentLocationStatus,
+            qpReceived: getCombinedTime('qpReceived'), qpBagOpened: getCombinedTime('qpBagOpened'), qpHandover: getCombinedTime('qpHandover'), examStarted: getCombinedTime('examStarted'),
+            presentMale: document.getElementById('presentMale').value, presentFemale: document.getElementById('presentFemale').value, absentMale: document.getElementById('absentMale').value, absentFemale: document.getElementById('absentFemale').value,
+            extraQReturned: getCombinedTime('extraQReturned'), examClosed: getCombinedTime('examClosed'), omrPacked: getCombinedTime('omrPacked'), selectedSubjects: selectedSubjs.join(', ')
         };
         
         try {
             const res = await submitToGoogle('submitData', data);
-            if (res.status === 'success') {
-                updateStatusBar('fa-cloud-check', 'Data Saved Successfully!', 'var(--success)', true);
-            } else {
-                updateStatusBar('fa-circle-xmark', 'Save Failed!', 'var(--danger)', true);
-            }
+            if (res.status === 'success') { updateStatusBar('fa-cloud-check', 'Data Saved Successfully!', 'var(--success)', true); } 
+            else { updateStatusBar('fa-circle-xmark', 'Save Failed!', 'var(--danger)', true); }
         } catch (e) {
-            updateStatusBar('fa-wifi', 'Network Error - Auto Retrying...', 'var(--danger)');
-            setTimeout(triggerSave, 3000);
+            updateStatusBar('fa-wifi', 'Network Error - Auto Retrying...', 'var(--danger)'); setTimeout(triggerSave, 3000);
         }
     }
 
-    // DAC DASHBOARD FUNCTIONS
+    // ==========================================
+    // DAC DASHBOARD 
+    // ==========================================
     async function fetchDacData(isSilent = false) {
-        if (!isSilent) {
-            document.getElementById('dac-loading').classList.remove('d-none');
-            document.getElementById('dac-content').innerHTML = ''; 
-        }
+        if (!isSilent) { document.getElementById('dac-loading').classList.remove('d-none'); document.getElementById('dac-content').innerHTML = ''; }
         try {
             const res = await submitToGoogle('getDacReport', { day: document.getElementById('dac-date-select').value });
-            if (res.status === 'success') renderDacDashboard(res.data);
-            else if (!isSilent) alert("Error fetching report");
-        } catch (e) {
-            if (!isSilent) alert("Network Error");
-        }
+            if (res.status === 'success') renderDacDashboard(res.data); else if (!isSilent) alert("Error fetching report");
+        } catch (e) { if (!isSilent) alert("Network Error"); }
         if (!isSilent) document.getElementById('dac-loading').classList.add('d-none');
     }
 
-    function formatSummaryStatus(count, total) {
-        if (total === 0) return "NO (0/0)";
-        return count === total ? `YES (${count}/${total})` : `NO (${count}/${total})`;
-    }
+    function formatSummaryStatus(count, total) { return total === 0 ? "NO (0/0)" : (count === total ? `YES (${count}/${total})` : `NO (${count}/${total})`); }
 
     function formatTimeAMPM(timeStr) {
         if (!timeStr || timeStr === 'Pending' || timeStr === '') return 'Pending';
         if (timeStr.toUpperCase().includes('AM') || timeStr.toUpperCase().includes('PM')) return timeStr; 
-        
-        if (timeStr.includes('GMT')) {
-            let d = new Date(timeStr);
-            if (!isNaN(d.getTime())) {
-                timeStr = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
-            }
-        } else if (timeStr.split(':').length === 3) {
-            timeStr = timeStr.substring(0, 5);
-        }
-        
         if (!/^\d{2}:\d{2}$/.test(timeStr)) return timeStr; 
-        let [hours, minutes] = timeStr.split(':');
-        hours = parseInt(hours, 10); const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12; hours = hours ? hours : 12; 
+        let [hours, minutes] = timeStr.split(':'); hours = parseInt(hours, 10); const ampm = hours >= 12 ? 'PM' : 'AM'; hours = hours % 12; hours = hours ? hours : 12; 
         return hours.toString().padStart(2, '0') + ':' + minutes + ' ' + ampm;
     }
 
@@ -888,15 +651,8 @@
         let reportedSubjectCounts = {};
 
         venues.forEach(v => {
-            const pm = parseInt(v.presM, 10) || 0;
-            const pf = parseInt(v.presF, 10) || 0;
-            const am = parseInt(v.absM, 10) || 0;
-            const af = parseInt(v.absF, 10) || 0;
-            
-            totalPresM += pm;
-            totalPresF += pf;
-            totalAbsM += am;
-            totalAbsF += af;
+            const pm = parseInt(v.presM, 10) || 0; const pf = parseInt(v.presF, 10) || 0; const am = parseInt(v.absM, 10) || 0; const af = parseInt(v.absF, 10) || 0;
+            totalPresM += pm; totalPresF += pf; totalAbsM += am; totalAbsF += af;
 
             if ((pm + pf + am + af) > 0) attendanceReportedCount++;
             if (v.qpReceived && v.qpReceived !== 'Pending' && v.qpReceived !== '') qpReceivedCount++;
@@ -913,22 +669,13 @@
             }
         });
 
-        // ROBUST OVERALL PERCENTAGE CALCULATION
-        const totalPresent = totalPresM + totalPresF;
-        const totalAbsent = totalAbsM + totalAbsF;
-        const totalCandidates = totalPresent + totalAbsent;
-        
-        let overallPercentage = "N/A";
-        if (totalCandidates > 0) {
-            const pct = ((totalPresent / totalCandidates) * 100).toFixed(2);
-            overallPercentage = `${pct}%`;
-        }
-
+        const totalPresent = totalPresM + totalPresF; const totalAbsent = totalAbsM + totalAbsF; const totalCandidates = totalPresent + totalAbsent;
+        let overallPercentage = totalCandidates > 0 ? `${((totalPresent / totalCandidates) * 100).toFixed(2)}%` : "0.00%";
         const attReportedText = formatSummaryStatus(attendanceReportedCount, totalVenues);
         const isAttComplete = attendanceReportedCount === totalVenues && totalVenues > 0;
 
-        let allSubjectNames = Object.keys(reportedSubjectCounts);
         let subjectSummaryHtml = '';
+        let allSubjectNames = Object.keys(reportedSubjectCounts);
         if (allSubjectNames.length > 0) {
             subjectSummaryHtml += `<div class="fw-bold mb-3 text-dark"><i class="fa-solid fa-book-open text-primary me-2"></i>Subject-wise Venue Count <span class="text-secondary fw-normal small">(Confirmed Only)</span></div><div class="row g-2 mb-3">`;
             allSubjectNames.forEach(subj => {
@@ -940,71 +687,21 @@
 
         let html = `
         <div class="card p-4 p-md-5 dac-summary-card mb-4">
-            <h5 class="text-dark m-0 fw-bold mb-4 d-flex align-items-center">
-                <i class="fa-solid fa-chart-line text-primary fs-4 me-2"></i> District Overview
-            </h5>
-            
+            <h5 class="text-dark m-0 fw-bold mb-4 d-flex align-items-center"><i class="fa-solid fa-chart-line text-primary fs-4 me-2"></i> District Overview</h5>
             <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4 mb-4 border border-light">
                 <span class="fw-bold text-secondary"><i class="fa-solid fa-clipboard-check text-primary me-2"></i>Attendance Reported</span>
                 <span class="badge ${isAttComplete ? 'bg-success' : 'bg-danger'} bg-opacity-10 ${isAttComplete ? 'text-success' : 'text-danger'} rounded-pill fs-6 px-3 py-2 border border-${isAttComplete ? 'success' : 'danger'} border-opacity-25">${attReportedText}</span>
             </div>
-            
-            <!-- 4-STAT BOXES INCLUDING TOTAL, PRESENT, ABSENT, PERCENTAGE -->
             <div class="row text-center mb-4 g-2">
-                <div class="col-6 col-md-3">
-                    <div class="stat-box border-0 bg-light p-2 p-md-3">
-                        <div class="text-secondary small fw-bold mb-1">Total</div>
-                        <div class="fs-4 fw-bold text-dark">${totalCandidates}</div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="stat-box border-0 bg-success bg-opacity-10 p-2 p-md-3">
-                        <div class="text-success small fw-bold mb-1">Present</div>
-                        <div class="fs-4 fw-bold text-success">${totalPresent}</div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="stat-box border-0 bg-danger bg-opacity-10 p-2 p-md-3">
-                        <div class="text-danger small fw-bold mb-1">Absent</div>
-                        <div class="fs-4 fw-bold text-danger">${totalAbsent}</div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="stat-box border-0 bg-primary bg-opacity-10 p-2 p-md-3">
-                        <div class="text-primary small fw-bold mb-1">Percentage</div>
-                        <div class="fs-4 fw-bold text-primary">${overallPercentage}</div>
-                    </div>
-                </div>
+                <div class="col-6 col-md-3"><div class="stat-box border-0 bg-light p-2 p-md-3"><div class="text-secondary small fw-bold mb-1">Total</div><div class="fs-4 fw-bold text-dark">${totalCandidates}</div></div></div>
+                <div class="col-6 col-md-3"><div class="stat-box border-0 bg-success bg-opacity-10 p-2 p-md-3"><div class="text-success small fw-bold mb-1">Present</div><div class="fs-4 fw-bold text-success">${totalPresent}</div></div></div>
+                <div class="col-6 col-md-3"><div class="stat-box border-0 bg-danger bg-opacity-10 p-2 p-md-3"><div class="text-danger small fw-bold mb-1">Absent</div><div class="fs-4 fw-bold text-danger">${totalAbsent}</div></div></div>
+                <div class="col-6 col-md-3"><div class="stat-box border-0 p-2 p-md-3" style="background-color: #e0f2fe;"><div class="small fw-bold mb-1" style="color: #0369a1;">Percentage</div><div class="fs-4 fw-bold" style="color: #0369a1;">${overallPercentage}</div></div></div>
             </div>
-            
-            <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4 mb-4 border border-light">
-                <div class="text-center w-50 border-end">
-                    <div class="small fw-bold text-success mb-1">Present Details</div>
-                    <div class="fs-6 fw-bold text-dark">${totalPresM} <span class="text-secondary fw-normal">M</span> &nbsp;|&nbsp; ${totalPresF} <span class="text-secondary fw-normal">F</span></div>
-                </div>
-                <div class="text-center w-50">
-                    <div class="small fw-bold text-danger mb-1">Absent Details</div>
-                    <div class="fs-6 fw-bold text-dark">${totalAbsM} <span class="text-secondary fw-normal">M</span> &nbsp;|&nbsp; ${totalAbsF} <span class="text-secondary fw-normal">F</span></div>
-                </div>
-            </div>
-            
             ${subjectSummaryHtml}
-            
-            <div class="fw-bold mb-3 text-dark mt-2"><i class="fa-solid fa-bars-progress text-primary me-2"></i>Venue Status Tracking</div>
-            <div class="bg-light p-4 rounded-4 border border-light">
-                ${buildSummaryTimeRow('QP Received', formatSummaryStatus(qpReceivedCount, totalVenues))}
-                ${buildSummaryTimeRow('Bag Opened', formatSummaryStatus(bagOpenedCount, totalVenues))}
-                ${buildSummaryTimeRow('QP Handover', formatSummaryStatus(qpHandoverCount, totalVenues))}
-                ${buildSummaryTimeRow('Exam Started', formatSummaryStatus(examStartedCount, totalVenues))}
-                ${buildSummaryTimeRow('Extra Q Returned', formatSummaryStatus(extraQCount, totalVenues))}
-                ${buildSummaryTimeRow('Exam Closed', formatSummaryStatus(examClosedCount, totalVenues))}
-                ${buildSummaryTimeRow('OMR Packed', formatSummaryStatus(omrPackedCount, totalVenues), true)}
-            </div>
         </div>
         
-        <h5 class="text-dark mt-5 mb-4 ps-2 fw-bold d-flex align-items-center">
-            <i class="fa-solid fa-building-columns text-primary fs-4 me-2"></i> Individual Venue Details
-        </h5>
+        <h5 class="text-dark mt-5 mb-4 ps-2 fw-bold d-flex align-items-center"><i class="fa-solid fa-building-columns text-primary fs-4 me-2"></i> Individual Venue Details</h5>
         <div class="row g-4">`;
 
         venues.forEach(v => {
@@ -1014,7 +711,64 @@
                 displaySubject = pills || `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-3 py-2"><i class="fa-regular fa-clock me-1"></i> Pending Selection</span>`;
             } else { displaySubject = `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-3 py-2"><i class="fa-regular fa-clock me-1"></i> Pending Selection</span>`; }
 
-            html += `<div class="col-12 col-lg-6"><div class="card p-4 h-100"><div class="d-flex justify-content-between align-items-start mb-1"><h5 class="text-primary fw-bold mb-1 fs-5 lh-sm">${v.centreName}</h5><span class="badge bg-light text-secondary border rounded-pill px-2 py-1 ms-2 flex-shrink-0"><i class="fa-solid fa-users text-primary opacity-75 me-1"></i>${v.totalCandidates}</span></div><div class="text-secondary small fw-medium mb-4"><i class="fa-solid fa-hashtag me-1"></i> ${v.centreCode}</div><div class="mb-4 p-3 bg-light rounded-4 border border-light"><span class="small fw-bold text-dark d-block mb-2"><i class="fa-solid fa-book-bookmark text-primary me-2"></i>Selected Subjects:</span><div class="d-flex flex-wrap">${displaySubject}</div></div><div class="fw-bold small mb-3 text-dark"><i class="fa-regular fa-id-badge text-primary me-2"></i>Attendance Summary</div><div class="mb-4 p-3 bg-white border border-light rounded-4"><div class="d-flex justify-content-between align-items-center"><div class="text-center w-50 border-end pe-2"><div class="small fw-bold text-success mb-1">Present</div><div class="fs-6 fw-bold text-dark">${v.presM} <span class="text-muted fw-normal">M</span> | ${v.presF} <span class="text-muted fw-normal">F</span></div></div><div class="text-center w-50 ps-2"><div class="small fw-bold text-danger mb-1">Absent</div><div class="fs-6 fw-bold text-dark">${v.absM} <span class="text-muted fw-normal">M</span> | ${v.absF} <span class="text-muted fw-normal">F</span></div></div></div><div class="text-center mt-3 pt-3 border-top"><span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fs-6 border border-primary border-opacity-25">Appeared: ${v.percentage}</span></div></div><div class="fw-bold small mb-3 text-dark"><i class="fa-solid fa-timeline text-primary me-2"></i>Status Tracking</div><div class="p-3 bg-light rounded-4 border border-light">${buildVenueTimeRow('QP Received', formatTimeAMPM(v.qpReceived), '08:15 AM')}${buildVenueTimeRow('Bag Opened', formatTimeAMPM(v.qpBagOpened), '10:15 AM')}${buildVenueTimeRow('QP Handover', formatTimeAMPM(v.qpHandover), '10:30 AM')}${buildVenueTimeRow('Exam Started', formatTimeAMPM(v.examStarted), '11:00 AM')}${buildVenueTimeRow('Extra Q Returned', formatTimeAMPM(v.extraQReturned), '11:30 AM')}${buildVenueTimeRow('Exam Closed', formatTimeAMPM(v.examClosed), '12:30 PM')}${buildVenueTimeRow('OMR Packed & Desp.', formatTimeAMPM(v.omrPacked), '', true)}</div></div></div>`;
+            // Location Badge Logic for DAC Dashboard
+            let locStatusBadge = "";
+            const locState = v.locationStatus || "Pending";
+            if (locState === "Matched") {
+                locStatusBadge = `<span class="badge bg-success bg-opacity-10 text-success border border-success rounded-pill px-2 py-1 ms-2"><i class="fa-solid fa-location-dot me-1"></i>Matched</span>`;
+            } else if (locState === "Not Matched") {
+                locStatusBadge = `<span class="badge bg-warning bg-opacity-10 text-warning border border-warning rounded-pill px-2 py-1 ms-2"><i class="fa-solid fa-location-crosshairs me-1"></i>Not Matched</span>`;
+            } else {
+                locStatusBadge = `<span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary rounded-pill px-2 py-1 ms-2"><i class="fa-solid fa-location-dot me-1"></i>${locState}</span>`;
+            }
+
+            html += `
+            <div class="col-12 col-lg-6">
+                <div class="card p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                        <h5 class="text-primary fw-bold mb-1 fs-5 lh-sm">${v.centreName}</h5>
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-light text-secondary border rounded-pill px-2 py-1 flex-shrink-0"><i class="fa-solid fa-users text-primary opacity-75 me-1"></i>${v.totalCandidates}</span>
+                        </div>
+                    </div>
+                    <div class="text-secondary small fw-medium mb-4 d-flex align-items-center">
+                        <i class="fa-solid fa-hashtag me-1"></i> ${v.centreCode} ${locStatusBadge}
+                    </div>
+                    
+                    <div class="mb-4 p-3 bg-light rounded-4 border border-light">
+                        <span class="small fw-bold text-dark d-block mb-2"><i class="fa-solid fa-book-bookmark text-primary me-2"></i>Selected Subjects:</span>
+                        <div class="d-flex flex-wrap">${displaySubject}</div>
+                    </div>
+                    
+                    <div class="fw-bold small mb-3 text-dark"><i class="fa-regular fa-id-badge text-primary me-2"></i>Attendance Summary</div>
+                    <div class="mb-4 p-3 bg-white border border-light rounded-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="text-center w-50 border-end pe-2">
+                                <div class="small fw-bold text-success mb-1">Present</div>
+                                <div class="fs-6 fw-bold text-dark">${v.presM} <span class="text-muted fw-normal">M</span> | ${v.presF} <span class="text-muted fw-normal">F</span></div>
+                            </div>
+                            <div class="text-center w-50 ps-2">
+                                <div class="small fw-bold text-danger mb-1">Absent</div>
+                                <div class="fs-6 fw-bold text-dark">${v.absM} <span class="text-muted fw-normal">M</span> | ${v.absF} <span class="text-muted fw-normal">F</span></div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3 pt-3 border-top">
+                            <span class="badge px-3 py-2 rounded-pill fs-6 border" style="background-color: #e0f2fe; color: #0369a1; border-color: rgba(3, 105, 161, 0.25) !important;">Appeared: ${v.percentage || "0.00%"}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="fw-bold small mb-3 text-dark"><i class="fa-solid fa-timeline text-primary me-2"></i>Status Tracking</div>
+                    <div class="p-3 bg-light rounded-4 border border-light">
+                        ${buildVenueTimeRow('QP Received', formatTimeAMPM(v.qpReceived), '08:15 AM')}
+                        ${buildVenueTimeRow('Bag Opened', formatTimeAMPM(v.qpBagOpened), '10:15 AM')}
+                        ${buildVenueTimeRow('QP Handover', formatTimeAMPM(v.qpHandover), '10:30 AM')}
+                        ${buildVenueTimeRow('Exam Started', formatTimeAMPM(v.examStarted), '11:00 AM')}
+                        ${buildVenueTimeRow('Extra Q Returned', formatTimeAMPM(v.extraQReturned), '11:30 AM')}
+                        ${buildVenueTimeRow('Exam Closed', formatTimeAMPM(v.examClosed), '12:30 PM')}
+                        ${buildVenueTimeRow('OMR Packed & Desp.', formatTimeAMPM(v.omrPacked), '', true)}
+                    </div>
+                </div>
+            </div>`;
         });
         html += `</div>`; document.getElementById('dac-content').innerHTML = html;
     }
